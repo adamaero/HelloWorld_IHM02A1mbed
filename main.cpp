@@ -129,9 +129,6 @@ L6470_init_t init[L6470DAISYCHAINSIZE] = {
     }
 };
 
-//DigitalIn enable(p5);
-
-
 /* Main ----------------------------------------------------------------------*/
 
 int main()
