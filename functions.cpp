@@ -64,6 +64,15 @@
 #define DELAY_2 2000
 #define DELAY_3 5000
 
+/* Declarations --------------------------------------------------------------*/
+
+   void forward();
+   void backDouble();
+   void goToMark();
+   void goHome();    
+   void halfMicrosteps();
+   void allTogether();
+
 
 /* Variables -----------------------------------------------------------------*/
 
@@ -133,6 +142,31 @@ L6470_init_t init[L6470DAISYCHAINSIZE] = {
 };
 
 //DigitalIn enable(p5);
+/* Main ----------------------------------------------------------------------*/
+
+int main()
+{
+    startup();  //  Must use.
+    
+    
+    
+    
+    
+    forward();
+    backDouble();
+    goToMark();
+    goHome();    
+    halfMicrosteps();
+    allTogether();
+        
+ 
+
+}  
+
+
+    /*----- Functions -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/
+     /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ /*----- -----*/ 
+
 void startup()
 {
     /*----- Initialization. -----*/
@@ -351,27 +385,3 @@ void allTogether()
     /* Waiting. */
     wait_ms(DELAY_3);
 }
-
-
-
-
-/* Main ----------------------------------------------------------------------*/
-
-int main()
-{
-    startup();  //  Must use.
-    
-    
-    
-    
-    
-    forward();
-    backDouble();
-    goToMark();
-    goHome();    
-    halfMicrosteps();
-    allTogether()
-        
- 
-
-}  
