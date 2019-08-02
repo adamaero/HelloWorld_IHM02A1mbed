@@ -161,7 +161,7 @@ int main()
 
     /* Setting the home position. */
     motors[0]->set_home();
-    motorstwo[1]->set_home();                   // @@
+//     motors[1]->set_home();                   // @@
 
     /* Waiting. */
     wait_ms(DELAY_1);
@@ -171,7 +171,7 @@ int main()
     int positiontwo = -1;
     
     position = motors[0]->get_position();       // Comment out this line to disable motor 1
-    positiontwo = motorstwo[1]->get_position(); // Comment out this line to disable motors 2 & 3
+    positiontwo = motors[1]->get_position();    // Comment out this line to disable motors 2 & 3
 
     /* Printing to the console. */
     if (position != -1)
