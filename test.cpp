@@ -64,6 +64,7 @@
 #define DELAY_2 2000
 #define DELAY_3 5000
 
+DigitalOut myled(LED1);
 
 /* Variables -----------------------------------------------------------------*/
 
@@ -129,12 +130,77 @@ L6470_init_t init[L6470DAISYCHAINSIZE] = {
     }
 };
 
-//DigitalIn enable(p5);
+/* Main ----------------------------------------------------------------------*/
 
-
-void forward()
+int main()
 {
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
+    
+    while(1) {
+        myled = 1;
+        wait(0.2);
+        myled = 0;
+        wait(0.2);
+    }   
+    
+    /*----- Initialization. -----*/
+
+    /* Initializing SPI bus. */
+#ifdef TARGET_STM32F429
+    DevSPI dev_spi(D11, D12, D13);
+#else
+    DevSPI dev_spi(D11, D12, D13);
+#endif
+
+    /* Initializing Motor Control Expansion Board. */
+    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
+
+    /* Building a list of motor control components. */
+    L6470 **motors = x_nucleo_ihm02a1->get_components();
+
+    /* Printing to the console. */
+    printf("Motor Control Application Example for 2 Motors\r\n\n");
+
+    /*----- Setting home and mark positions, getting positions, and going to positions. 0-----*/
+
+    /* Printing to the console. */
+    printf("--> Setting home position.\r\n");
+
+    /* Setting the home position. */
+    motors[0]->set_home();
+//     motors[1]->set_home();                   // @@
+
+    /* Waiting. */
+    wait_ms(DELAY_1);
+
+    /* Getting the current position. */
+    int position = -1;
+    int positiontwo = -1;
+    
+    position = motors[0]->get_position();       // Comment out this line to disable motor 1
+    positiontwo = motors[1]->get_position();    // Comment out this line to disable motors 2 & 3
+
+    /* Printing to the console. */
+    if (position != -1)
+    printf("--> Getting the current position1: %d\r\n", position);
+    if (positiontwo != -1)
+    printf("--> Getting the current position2: %d\r\n", positiontwo);
+    
+    /* Waiting. */
+    wait_ms(DELAY_1);
+    
+    
+    
+    DigitalOut led(LED1);
+    
+    
+    
+    
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
+    
+    
+    
+
     /* Printing to the console. */
     printf("--> Moving forward %d steps.\r\n", STEPS_1);
 
@@ -169,207 +235,163 @@ void forward()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-}
+
     
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 2: Double back-----*/    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 2: Double back-----*/    
     
-void backDouble()
-{
-    /* Printing to the console. */
-    printf("--> Moving backward %d steps.\r\n", STEPS_2);
+    
+//     /* Printing to the console. */
+//     printf("--> Moving backward %d steps.\r\n", STEPS_2);
 
-    /* Moving. */
-    motors[0]->move(StepperMotor::BWD, STEPS_2);
+//     /* Moving. */
+//     motors[0]->move(StepperMotor::BWD, STEPS_2);
 
-    /* Waiting while active. */
-    motors[0]->wait_while_active();
+//     /* Waiting while active. */
+//     motors[0]->wait_while_active();
 
-    /* Waiting. */
-    wait_ms(DELAY_1);
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
    
-    /* Getting the current position. */
-    position = motors[0]->get_position();
+//     /* Getting the current position. */
+//     position = motors[0]->get_position();
     
-    /* Printing to the console. */
-    printf("--> Getting the current position: %d\r\n", position);
+//     /* Printing to the console. */
+//     printf("--> Getting the current position: %d\r\n", position);
 
-    /* Waiting. */
-    wait_ms(DELAY_1);    
+//     /* Waiting. */
+//     wait_ms(DELAY_1);    
+    
+    
+//     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 3: Go to mark-----*/
+    
+    
+//     /* Printing to the console. */
+//     printf("--> Going to marked position.\r\n");
+
+//     /* Going to marked position. */
+//     motors[0]->go_mark();
+    
+//     /* Waiting while active. */
+//     motors[0]->wait_while_active();
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+//     /* Getting the current position. */
+//     position = motors[0]->get_position();
+    
+//     /* Printing to the console. */
+//     printf("--> Getting the current position: %d\r\n", position);
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+    
+//     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 4: Go to home-----*/
+    
+    
+    
+//     /* Printing to the console. */
+//     printf("--> Going to home position.\r\n");
+
+//     /* Going to home position. */
+//     motors[0]->go_home();
+    
+//     /* Waiting while active. */
+//     motors[0]->wait_while_active();
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+//     /* Getting the current position. */
+//     position = motors[0]->get_position();
+    
+//     /* Printing to the console. */
+//     printf("--> Getting the current position: %d\r\n", position);
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+    
+//     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 5-----*/    
+    
+    
+//     /* Printing to the console. */
+//     printf("--> Halving the microsteps.\r\n");
+
+//     /* Halving the microsteps. */
+//     init[0].step_sel = (init[0].step_sel > 0 ? init[0].step_sel -  1 : init[0].step_sel);
+    
+//     if (!motors[0]->set_step_mode((StepperMotor::step_mode_t) init[0].step_sel)) {
+//         printf("    Step Mode not allowed.\r\n");
+//     }
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+//     /* Printing to the console. */
+//     printf("--> Setting home position.\r\n");
+
+//     /* Setting the home position. */
+//     motors[0]->set_home();
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+//     /* Getting the current position. */
+//     position = motors[0]->get_position();
+    
+//     /* Printing to the console. */
+//     printf("--> Getting the current position: %d\r\n", position);
+
+//     /* Waiting. */
+//     wait_ms(DELAY_1);
+
+    
+//     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
+    
+    
+//     /* Printing to the console. */
+//     printf("--> Moving forward %d steps.\r\n", STEPS_1);
+
+//     /* Moving. */
+//     motors[0]->move(StepperMotor::FWD, STEPS_1);
+
+//     /* Waiting while active. */
+//     motors[0]->wait_while_active();
+
+//     /* Getting the current position. */
+//     position = motors[0]->get_position();
+    
+//     /* Printing to the console. */
+//     printf("--> Getting the current position: %d\r\n", position);
+
+//     /* Printing to the console. */
+//     printf("--> Marking the current position.\r\n");
+
+//     /* Marking the current position. */
+//     motors[0]->set_mark();
+
+//     /* Waiting. */
+//     wait_ms(DELAY_2);
+
+    
+//     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 6: Together-----*/
+    
+
+//     /*----- Running together for a certain amount of time. -----*/
+
+//     /* Printing to the console. */
+//     printf("--> Running together for %d seconds.\r\n", DELAY_3 / 1000);
+
+//     /* Preparing each motor to perform a run at a specified speed. */
+//     for (int m = 0; m < L6470DAISYCHAINSIZE; m++) {
+//         motors[m]->prepare_run(StepperMotor::BWD, 400);
+//     }
+
+//     /* Performing the action on each motor at the same time. */
+//     x_nucleo_ihm02a1->perform_prepared_actions();
+
+//     /* Waiting. */
+//     wait_ms(DELAY_3);
 }
-    
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 3: Go to mark-----*/
-void goToMark()
-{  
-    /* Printing to the console. */
-    printf("--> Going to marked position.\r\n");
-
-    /* Going to marked position. */
-    motors[0]->go_mark();
-    
-    /* Waiting while active. */
-    motors[0]->wait_while_active();
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Getting the current position. */
-    position = motors[0]->get_position();
-    
-    /* Printing to the console. */
-    printf("--> Getting the current position: %d\r\n", position);
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-}
-    
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 4: Go to home-----*/
-void goHome()    
-{    
-    
-    /* Printing to the console. */
-    printf("--> Going to home position.\r\n");
-
-    /* Going to home position. */
-    motors[0]->go_home();
-    
-    /* Waiting while active. */
-    motors[0]->wait_while_active();
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Getting the current position. */
-    position = motors[0]->get_position();
-    
-    /* Printing to the console. */
-    printf("--> Getting the current position: %d\r\n", position);
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-}
-    
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 5-----*/    
-    
-void halfMicrosteps()
-{    
-    /* Printing to the console. */
-    printf("--> Halving the microsteps.\r\n");
-
-    /* Halving the microsteps. */
-    init[0].step_sel = (init[0].step_sel > 0 ? init[0].step_sel -  1 : init[0].step_sel);
-    
-    if (!motors[0]->set_step_mode((StepperMotor::step_mode_t) init[0].step_sel)) {
-        printf("    Step Mode not allowed.\r\n");
-    }
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Printing to the console. */
-    printf("--> Setting home position.\r\n");
-
-    /* Setting the home position. */
-    motors[0]->set_home();
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Getting the current position. */
-    position = motors[0]->get_position();
-    
-    /* Printing to the console. */
-    printf("--> Getting the current position: %d\r\n", position);
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-}
-    
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 6: Together-----*/
-    
-void allTogether()
-{
-    /*----- Running together for a certain amount of time. -----*/
-
-    /* Printing to the console. */
-    printf("--> Running together for %d seconds.\r\n", DELAY_3 / 1000);
-
-    /* Preparing each motor to perform a run at a specified speed. */
-    for (int m = 0; m < L6470DAISYCHAINSIZE; m++) {
-        motors[m]->prepare_run(StepperMotor::BWD, 400);
-    }
-
-    /* Performing the action on each motor at the same time. */
-    x_nucleo_ihm02a1->perform_prepared_actions();
-
-    /* Waiting. */
-    wait_ms(DELAY_3);
-}
-
-
-
-
-/* Main ----------------------------------------------------------------------*/
-
-int main()
-{
-    /*----- Initialization. -----*/
-
-    /* Initializing SPI bus. */
-#ifdef TARGET_STM32F429
-    DevSPI dev_spi(D11, D12, D13);
-#else
-    DevSPI dev_spi(D11, D12, D13);
-#endif
-
-    /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
-
-    /* Building a list of motor control components. */
-    L6470 **motors = x_nucleo_ihm02a1->get_components();
-
-    /* Printing to the console. */
-    printf("Motor Control Application Example for 2 Motors\r\n\n");
-
-    /*----- Setting home and mark positions, getting positions, and going to positions. 0-----*/
-
-    /* Printing to the console. */
-    printf("--> Setting home position.\r\n");
-
-    /* Setting the home position. */
-    motors[0]->set_home();
-    //motors[1]->set_home();                   // @@
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Getting the current position. */
-    int position = -1;
-    int positiontwo = -1;
-    
-    position = motors[0]->get_position();       // Comment out this line to disable motor 1
-    positiontwo = motors[1]->get_position(); // Comment out this line to disable motors 2 & 3
-
-    /* Printing to the console. */
-    if (position != -1)
-    printf("--> Getting the current position1: %d\r\n", position);
-    if (positiontwo != -1)
-    printf("--> Getting the current position2: %d\r\n", positiontwo);
-    
-    /* Waiting. */
-    wait_ms(DELAY_1);
-    
-    
-    
-    
-    
-    
-    forward();
-    backDouble();
-    goToMark();
-    goHome();    
-    halfMicrosteps();
-    allTogether()
-        
- 
-
-}  
