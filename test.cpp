@@ -185,11 +185,22 @@ int main()
     
     
     
-    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
     
     
-    
+    forward();
+    backDouble();
+    goToMark();
+    goHome();    
+    halfMicrosteps();
+    allTogether()
+        
+        
 
+}  
+    
+void forward()
+{
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
     /* Printing to the console. */
     printf("--> Moving forward %d steps.\r\n", STEPS_1);
 
@@ -224,11 +235,12 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-
+}
     
     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 2: Double back-----*/    
     
-    
+void backDouble()
+{
     /* Printing to the console. */
     printf("--> Moving backward %d steps.\r\n", STEPS_2);
 
@@ -249,11 +261,11 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);    
-    
+}
     
     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 3: Go to mark-----*/
-    
-    
+void goToMark()
+{  
     /* Printing to the console. */
     printf("--> Going to marked position.\r\n");
 
@@ -274,11 +286,11 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-
+}
     
     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 4: Go to home-----*/
-    
-    
+void goHome()    
+{    
     
     /* Printing to the console. */
     printf("--> Going to home position.\r\n");
@@ -300,11 +312,12 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-
+}
     
     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 5-----*/    
     
-    
+void halfMicrosteps()
+{    
     /* Printing to the console. */
     printf("--> Halving the microsteps.\r\n");
 
@@ -335,11 +348,12 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-
+}
     
     /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 6: Together-----*/
     
-
+void allTogether()
+{
     /*----- Running together for a certain amount of time. -----*/
 
     /* Printing to the console. */
