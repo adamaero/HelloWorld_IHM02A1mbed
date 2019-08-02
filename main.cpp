@@ -185,7 +185,7 @@ int main()
     
     
     
-/*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1-----*/
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
     
     
     
@@ -201,21 +201,19 @@ int main()
         
     /* Waiting while active. */
     if (position != -1)    
-    motors[0]->wait_while_active();
+        motors[0]->wait_while_active();
     if (positiontwo != -1)    
-    motors[1]->wait_while_active();
+        motors[1]->wait_while_active();
 
     /* Getting the current position. */
     if (position != -1)        
-    position = motors[0]->get_position();
+        position = motors[0]->get_position();
     if (positiontwo != -1)    
-    position = motors[1]->get_position();
-    
+        position = motors[1]->get_position();
     
     /* Printing to the console. */
     
     printf("--> Getting the current position1: %d\r\n", position);
-    
     printf("--> Getting the current position2: %d\r\n", positiontwo);
 
     /* Printing to the console. */
@@ -227,6 +225,10 @@ int main()
     /* Waiting. */
     wait_ms(DELAY_1);
 
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 2: Double back-----*/    
+    
+    
     /* Printing to the console. */
     printf("--> Moving backward %d steps.\r\n", STEPS_2);
 
@@ -238,7 +240,7 @@ int main()
 
     /* Waiting. */
     wait_ms(DELAY_1);
-
+   
     /* Getting the current position. */
     position = motors[0]->get_position();
     
@@ -246,8 +248,12 @@ int main()
     printf("--> Getting the current position: %d\r\n", position);
 
     /* Waiting. */
-    wait_ms(DELAY_1);
-
+    wait_ms(DELAY_1);    
+    
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 3: Go to mark-----*/
+    
+    
     /* Printing to the console. */
     printf("--> Going to marked position.\r\n");
 
@@ -269,6 +275,11 @@ int main()
     /* Waiting. */
     wait_ms(DELAY_1);
 
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 4: Go to home-----*/
+    
+    
+    
     /* Printing to the console. */
     printf("--> Going to home position.\r\n");
 
@@ -290,11 +301,16 @@ int main()
     /* Waiting. */
     wait_ms(DELAY_1);
 
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 5-----*/    
+    
+    
     /* Printing to the console. */
     printf("--> Halving the microsteps.\r\n");
 
     /* Halving the microsteps. */
     init[0].step_sel = (init[0].step_sel > 0 ? init[0].step_sel -  1 : init[0].step_sel);
+    
     if (!motors[0]->set_step_mode((StepperMotor::step_mode_t) init[0].step_sel)) {
         printf("    Step Mode not allowed.\r\n");
     }
@@ -320,6 +336,10 @@ int main()
     /* Waiting. */
     wait_ms(DELAY_1);
 
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 1: Forward-----*/
+    
+    
     /* Printing to the console. */
     printf("--> Moving forward %d steps.\r\n", STEPS_1);
 
@@ -344,6 +364,9 @@ int main()
     /* Waiting. */
     wait_ms(DELAY_2);
 
+    
+    /*----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- ----- 6: Together-----*/
+    
 
     /*----- Running together for a certain amount of time. -----*/
 
