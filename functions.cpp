@@ -60,7 +60,6 @@
 #define STEPS_2 (STEPS_1 * 2)
 
 /* Delay in milliseconds. */
-#define DELAY_1 1000
 #define DELAY_2 2000
 #define DELAY_3 5000
 
@@ -69,7 +68,8 @@
     int position = -1;
     int positiontwo = -1;
    L6470 **motors;
-    
+   x_nucleo_ihm02a1;
+
 /* Motor Control Expansion Board. */
 XNucleoIHM02A1 *x_nucleo_ihm02a1;
 
@@ -144,50 +144,7 @@ void allTogether();
 /* Main ----------------------------------------------------------------------*/
 
 int main()
-{
-    /*----- Initialization. -----*/
-
-    /* Initializing SPI bus. */
-#ifdef TARGET_STM32F429
-    DevSPI dev_spi(D11, D12, D13);
-#else
-    DevSPI dev_spi(D11, D12, D13);
-#endif
-
-    /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
-
-    /* Building a list of motor control components. */
-    L6470 **motors = x_nucleo_ihm02a1->get_components();
-
-    /* Printing to the console. */
-    printf("Motor Control Application Example for 2 Motors\r\n\n");
-
-    /*----- Setting home and mark positions, getting positions, and going to positions. 0-----*/
-
-    /* Printing to the console. */
-    printf("--> Setting home position.\r\n");
-
-    /* Setting the home position. */
-    motors[0]->set_home();
-    //motors[1]->set_home();                   // @@
-
-    /* Waiting. */
-    wait_ms(DELAY_1);
-
-    /* Getting the current position. */   
-    position = motors[0]->get_position();       // Comment out this line to disable motor 1
-    positiontwo = motors[1]->get_position(); // Comment out this line to disable motors 2 & 3
-
-    /* Printing to the console. */
-    if (position != -1)
-    printf("--> Getting the current position1: %d\r\n", position);
-    if (positiontwo != -1)
-    printf("--> Getting the current position2: %d\r\n", positiontwo);
-    
-    /* Waiting. */
-    wait_ms(DELAY_1);        
-    
+{      
     
     //DigitalIn enable(p5);
     
@@ -198,7 +155,6 @@ int main()
     halfMicrosteps();
     allTogether();
         
- 
 
 }  
 
