@@ -174,10 +174,10 @@ void startup()
 #endif
 
     /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
+    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, D2, &dev_spi);
 
     /* Building a list of motor control components. */
-    L6470 **motors = x_nucleo_ihm02a1->get_components();
+    motors = x_nucleo_ihm02a1->get_components();
 
     /* Printing to the console. */
     printf("Motor Control Application Example for 2 Motors\r\n\n");
