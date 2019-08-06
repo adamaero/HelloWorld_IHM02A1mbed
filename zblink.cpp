@@ -21,6 +21,12 @@
 /* Motor Control Expansion Board. */
 XNucleoIHM02A1 *x_nucleo_ihm02a1;
 
+
+
+DigitalOut myled(LED1);
+
+
+
 * Main ----------------------------------------------------------------------*/
 
 int main()
@@ -40,5 +46,11 @@ int main()
     /* Building a list of motor control components. */
     L6470 **motors = x_nucleo_ihm02a1->get_components();
     
+    while(1) {
+        myled = 1;
+        wait(0.2);
+        myled = 0;
+        wait(0.2);
+    }
     
 }
