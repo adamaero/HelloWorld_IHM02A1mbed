@@ -84,7 +84,7 @@ int main()
 #endif
 
     /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[2], &init[3], A4, D2, D4, A2, &dev_spi);
+    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, D2, &dev_spi);    
                                         //                                      
     /* Building a list of motor control components. */
     L6470 **motors = x_nucleo_ihm02a1->get_components();
