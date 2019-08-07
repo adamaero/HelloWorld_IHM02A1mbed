@@ -14,6 +14,7 @@
 
 /* Motor Control Expansion Board. */
 XNucleoIHM02A1 *x_nucleo_ihm02a1;
+XNucleoIHM02A1 *x_nucleo_ihm02a1two;
 
 /* Initialization parameters of the motors connected to the expansion board. */
 L6470_init_t init[L6470DAISYCHAINSIZE] = {
@@ -84,10 +85,12 @@ int main()
 #endif
 
     /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, D2, &dev_spi);    
+    x_nucleo_ihm02a1 =   newXNucleoIHM02A1(&L6470_init[ 0 ],&L6470_init[ 1 ], A4, A5, D4, A2, dev_spi);
+    x_nucleo_ihm02a1two =newXNucleoIHM02A1(&L6470_init[ 2 ],&L6470_init[ 3 ], A4, A5, D4, D2, dev_spi);
                                         //                                      
     /* Building a list of motor control components. */
     L6470 **motors = x_nucleo_ihm02a1->get_components();
+    L6470 **motors = x_nucleo_ihm02a1two->get_components();
 
     /* Setting the home position. */
     motors[3]->set_home();
