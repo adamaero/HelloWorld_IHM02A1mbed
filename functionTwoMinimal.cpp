@@ -11,9 +11,9 @@
 #define DELAY_2 2000
 #define DELAY_3 5000
 
-L6470 **motors;
+L6470 **motors; // double pointer, to L6470 (chip) class
 
-XNucleoIHM02A1 *x_nucleo_ihm02a1;
+XNucleoIHM02A1 *x_nucleo_ihm02a1; // pointer to function
 
 int position = -1;
 int positiontwo = -1;
