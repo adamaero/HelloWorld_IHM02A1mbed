@@ -60,15 +60,15 @@
 #define STEPS_2 (STEPS_1 * 2)
 
 /* Delay in milliseconds. */
+#define DELAY_1 1000
 #define DELAY_2 2000
 #define DELAY_3 5000
 
 /* Variables -----------------------------------------------------------------*/
 
-    int position = -1;
-    int positiontwo = -1;
+    int position = 0;
+    int positiontwo = 0;
    L6470 **motors;
-   x_nucleo_ihm02a1;
 
 /* Motor Control Expansion Board. */
 XNucleoIHM02A1 *x_nucleo_ihm02a1;
@@ -133,7 +133,7 @@ L6470_init_t init[L6470DAISYCHAINSIZE] = {
 };
 
 /* Declarations --------------------------------------------------------------*/
-// void startup();
+void startup();
 void forward();
 void backDouble();
 void goToMark();
@@ -146,14 +146,29 @@ void allTogether();
 int main()
 {      
     
-    //DigitalIn enable(p5);
-    
+    //DigitalIn enable(p5);    
+
+    /* Initializing SPI bus. */
+#ifdef TARGET_STM32F429
+    DevSPI dev_spi(D11, D12, D13);
+#else
+    DevSPI dev_spi(D11, D12, D13);
+#endif
+
+    /* Initializing Motor Control Expansion Board. */
+    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
+
+    /* Building a list of motor control components. */
+    motors = x_nucleo_ihm02a1->get_components();
+
+    startup();
+
     forward();
-    backDouble();
-    goToMark();
-    goHome();    
-    halfMicrosteps();
-    allTogether();
+//     backDouble();
+//     goToMark();          // may be broken
+//     goHome();    
+//     halfMicrosteps();    // may be broken
+//     allTogether();
         
 
 }  
@@ -165,19 +180,6 @@ int main()
 void startup()
 {
     /*----- Initialization. -----*/
-
-    /* Initializing SPI bus. */
-#ifdef TARGET_STM32F429
-    DevSPI dev_spi(D11, D12, D13);
-#else
-    DevSPI dev_spi(D11, D12, D13);
-#endif
-
-    /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, D2, &dev_spi);
-
-    /* Building a list of motor control components. */
-    motors = x_nucleo_ihm02a1->get_components();
 
     /* Printing to the console. */
     printf("Motor Control Application Example for 2 Motors\r\n\n");
@@ -195,14 +197,11 @@ void startup()
     wait_ms(DELAY_1);
 
     /* Getting the current position. */   
-    position = motors[0]->get_position();       // Comment out this line to disable motor 1
-    positiontwo = motors[1]->get_position(); // Comment out this line to disable motors 2 & 3
+    position = motors[0]->get_position(); 
+    positiontwo = motors[1]->get_position(); 
 
     /* Printing to the console. */
-    if (position != -1)
     printf("--> Getting the current position1: %d\r\n", position);
-    if (positiontwo != -1)
-    printf("--> Getting the current position2: %d\r\n", positiontwo);
     
     /* Waiting. */
     wait_ms(DELAY_1);    
@@ -215,21 +214,15 @@ void forward()
     printf("--> Moving forward %d steps.\r\n", STEPS_1);
 
     /* Moving. */
-    if (position != -1)
         motors[0]->move(StepperMotor::FWD, STEPS_1);
-    if (positiontwo != -1)
         motors[1]->move(StepperMotor::FWD, STEPS_1);
         
     /* Waiting while active. */
-    if (position != -1)    
         motors[0]->wait_while_active();
-    if (positiontwo != -1)    
         motors[1]->wait_while_active();
 
     /* Getting the current position. */
-    if (position != -1)        
         position = motors[0]->get_position();
-    if (positiontwo != -1)    
         position = motors[1]->get_position();
     
     /* Printing to the console. */
