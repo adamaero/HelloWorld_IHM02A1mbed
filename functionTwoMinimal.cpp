@@ -2,6 +2,12 @@
 #include "DevSPI.h"
 #include "XNucleoIHM02A1.h"
 
+#define L6470_L1M1 (0u) // Index of shield1 motor1
+#define L6470_L1M2 (1u) // Index of shield1 motor2
+
+// #define L6470_L2M1 (0u) // Index of shield2 motor1
+#define L6470_L2M2 (1u) // Index of shield2 motor2
+
 #define MPR_1 4
 
 #define STEPS_1 (200 * 128)
@@ -11,12 +17,13 @@
 #define DELAY_2 2000
 #define DELAY_3 5000
 
-L6470 **motors; // double pointer, to L6470 (chip) class
+L6470 **motors1stLevel; // double pointer, to L6470 (chip) class
+L6470 **motors2ndLevel;
 
-XNucleoIHM02A1 *x_nucleo_ihm02a1; // pointer to function
+XNucleoIHM02A1 *x_nucleo_ihm02a1one; // pointer to function
+XNucleoIHM02A1 *x_nucleo_ihm02a1two;
 
-int position = -1;
-int positiontwo = -1;
+int positionL1M1, positionL1M2, positionL2M1, positionL2M2 = -1;
 
 L6470_init_t init[L6470DAISYCHAINSIZE] = {
     /* First Motor. */
@@ -78,7 +85,7 @@ L6470_init_t init[L6470DAISYCHAINSIZE] = {
 
 void startup();
 void forward();
-void allTogether();
+// void allTogether();
 
 int main()
 {      
@@ -90,14 +97,29 @@ int main()
 #endif
 
     /* Initializing Motor Control Expansion Board. */
-    x_nucleo_ihm02a1 = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
+    x_nucleo_ihm02a1one = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, A2, &dev_spi);
+    // x_nucleo_ihm02a1two = new XNucleoIHM02A1(&init[0], &init[1], A0, A1, D1, D2, &dev_spi);  
+    x_nucleo_ihm02a1two = new XNucleoIHM02A1(&init[0], &init[1], A4, A5, D4, D2, &dev_spi);
 
+  //																				First shield works, motors move.
+  //																				Second shield (3rd motor) does nothing...
+/**
+ ******************************************************************************
+  *
+ * 
+ * 
+ * 
+ *
+ ******************************************************************************
+ */
     /* Building a list of motor control components. */
-    motors = x_nucleo_ihm02a1->get_components();
+    motors1stLevel = x_nucleo_ihm02a1one->get_components();
+    motors2ndLevel = x_nucleo_ihm02a1two->get_components();
 
-    startup();
+    // startup();
 
     forward();
+  
 //    allTogether();
         
 
@@ -107,32 +129,36 @@ int main()
 void startup()
 {
     /*----- Initialization. -----*/
-    
-    motors[0]->set_home();
-    //motors[1]->set_home();                   // @@
+    motors1stLevel[L6470_L1M1]->set_home();
+    motors1stLevel[L6470_L1M2]->set_home();
+    // motors2ndLevel[L6470_L2M1]->set_home(); 
+    motors2ndLevel[L6470_L2M2]->set_home();
 
     wait_ms(DELAY_1);
 
-    position = motors[0]->get_position(); 
-    positiontwo = motors[1]->get_position(); 
-    
+    positionL1M1 = motors1stLevel[L6470_L1M1]->get_position();
+    positionL1M2 = motors1stLevel[L6470_L1M2]->get_position();
+    // positionL2M1 = motors2ndLevel[L6470_L2M1]->get_position();
+    positionL2M2 = motors2ndLevel[L6470_L2M2]->get_position();
+      
     wait_ms(DELAY_1);    
 }
 
 void forward()
 {
-        motors[0]->move(StepperMotor::FWD, STEPS_1);
-        motors[1]->move(StepperMotor::FWD, STEPS_1);
-        
-    wait_ms(DELAY_2);
+        motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, STEPS_1);
+        motors1stLevel[L6470_L1M2]->move(StepperMotor::FWD, STEPS_1);
+      wait_ms(DELAY_3);
+        motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);	// There is no L2M1
+        motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);
 }
     
-void allTogether()
+void allTogether()// right now. Over me. bum bum, batta bumm...He bad production He got walrus gumboot He got Ono sideboard He one spinal cracker He got feet down below his kneeieeieesss
 {
-    for (int m = 0; m < L6470DAISYCHAINSIZE; m++) 
-        motors[m]->prepare_run(StepperMotor::BWD, 400);
-        
-    x_nucleo_ihm02a1->perform_prepared_actions();
-
-    wait_ms(DELAY_3);
+//    for (int m = 0; m < L6470DAISYCHAINSIZE; m++) 
+//        motors[m]->prepare_run(StepperMotor::BWD, 400);
+//        
+//    x_nucleo_ihm02a1->perform_prepared_actions();
+//
+//    wait_ms(DELAY_3);
 }
