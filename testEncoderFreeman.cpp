@@ -129,7 +129,7 @@ void startup()
     wait_ms(DELAY_1);    
 }
 
-void forward()
+int forward(int motorChoice, int steps)
 {
         motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, STEPS_1);
         motors1stLevel[L6470_L1M2]->move(StepperMotor::FWD, STEPS_1);
@@ -248,7 +248,7 @@ int main()
         {               //  Do things once per second here
             c_5 = 0;
         }
-        while   (!trigger_200ms)    ;//  NEARLY ALL CPU TIME WASTED HERE waiting for interrupt handler to set trigger_200 true
+        while(!trigger_200ms);      //  NEARLY ALL CPU TIME WASTED HERE waiting for interrupt handler to set trigger_200 true
         trigger_200ms = false;      //  Hence main loop is cycled every 200ms
     }
 
