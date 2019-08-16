@@ -34,12 +34,12 @@ XNucleoIHM02A1 *x_nucleo_ihm02a1two;
 
 /*  ----- Encoders -----  */
 
-/*  Second motor sensors  */
+/*   Third motor sensors  */
 InterruptIn rcA     (D8);     //  Coder provides A and B quadrature outputs and a once-per-rev index position pulse (signal Z)
 InterruptIn rcB     (D9);     //  These three signals wired to inputs configured to cause CPU interrupt on every level transition
 InterruptIn rcZ     (D11);
-DigitalOut  led_grn     (LED1); //  green led on ST Nucleo board set to flash to prove system alive
-BufferedSerial pc(USBTX, USBRX);    //  serial port via usb used to display output on pc using TTY terminal e.g. PuTTY
+DigitalOut  led_grn (LED1);   //  green led on ST Nucleo board set to flash to prove system alive
+BufferedSerial pc(USBTX, USBRX);    //  Serial port via usb used to display output on pc using TTY terminal e.g. PuTTY
 
 volatile    bool    trigger_200ms = false;
 
@@ -137,49 +137,58 @@ void forward()
 //        motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);   // There is no L2M1
         motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);
 }    
+
+
+
 /*  ----- Encoders -----  */
-void ledToggler(void) { //  Interrupt handler - led on half sec, off half sec, repeat
+
+void ledToggler(void) 
+{                   //  Interrupt handler - led on half sec, off half sec, repeat
     led_grn = !led_grn;
     if  (led_grn)
         seconds++;  //  Counts up once per second
 }
  
-void    twohundredms_handler    ()  {
+void twohundredms_handler()  
+{
     trigger_200ms = true;
 }
  
 signed long angle = 0, turns = 0;
  
-void    rcArise_handler ()  {   //  Handler of 'A' rising edge interrupts
+void rcArise_handler ()  
+{                       //  Handler of 'A' rising edge interrupts
     if  (rcB)   angle++;
     else        angle--;
 }
  
-void    rcAfall_handler ()  {   //  Handler of 'A' falling edge interrupts
+void rcAfall_handler()
+{                       //  Handler of 'A' falling edge interrupts
     if  (rcB)   angle--;
     else        angle++;
 }
  
-void    rcBrise_handler ()  {   //  Handler of 'B' rising edge interrupts   
+void rcBrise_handler()
+{                       //  Handler of 'B' rising edge interrupts   
     if  (rcA)   angle--;
     else        angle++;
 }
  
-void    rcBfall_handler ()  {   //  Handler of 'B' falling edge interrupts
+void rcBfall_handler()
+{                       //  Handler of 'B' falling edge interrupts
     if  (rcA)   angle++;
     else        angle--;
 }
  
-void    rcZrise_handler ()  {   //  Index pulse interrupt handler,
-    if   (rcA)   {              //  Keeps count of whole turns of the shaft
+void rcZrise_handler()
+{                       //  Index pulse interrupt handler,
+    if   (rcA)   //  Keeps count of whole turns of the shaft
         turns--;
-    }
-    else    {
+    else
         turns++;
-    }
+
     angle = 0;
 }
-void    rcZfall_handler ()  {   }
 
 int main()
 {      
@@ -219,12 +228,11 @@ int main()
     rcA.mode  (PullUp);     //  Attach pullup resistors to the 3 coder outputs
     rcB.mode  (PullUp);
     rcZ.mode  (PullUp);
-    rcA.rise  (&rcArise_handler);   //  Identify interrupt handlers for each of rise and fall
-    rcA.fall  (&rcAfall_handler);   //  events on all three input lines
+    rcA.rise  (&rcArise_handler);   //  Identify interrupt handlers for each
+    rcA.fall  (&rcAfall_handler);   //  rise and fall events on all input lines
     rcB.rise  (&rcBrise_handler);
     rcB.fall  (&rcBfall_handler);
     rcZ.rise  (&rcZrise_handler);
-    rcZ.fall  (&rcZfall_handler);
  
     pc.baud (115200);
     pc.printf   ("Jon's rotary encoder test sytem starting up\r\n");
@@ -232,8 +240,9 @@ int main()
     //  Main loop
     while(1) 
     {
-        pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 2048.0);
- 
+//        pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 2048.0);
+        pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 30.0);
+
         c_5++;
         if(c_5 > 4)
         {               //  Do things once per second here
