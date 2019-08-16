@@ -129,7 +129,6 @@ void startup()
     wait_ms(DELAY_1);    
 }
 
-}
 void forward()
 {
         motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, STEPS_1);
@@ -142,7 +141,7 @@ void forward()
 void ledToggler(void) { //  Interrupt handler - led on half sec, off half sec, repeat
     led_grn = !led_grn;
     if  (led_grn)
-        seconds++;  //  counts up once per second
+        seconds++;  //  Counts up once per second
 }
  
 void    twohundredms_handler    ()  {
@@ -172,7 +171,7 @@ void    rcBfall_handler ()  {   //  Handler of 'B' falling edge interrupts
 }
  
 void    rcZrise_handler ()  {   //  Index pulse interrupt handler,
-    if   (rcA)   {              //  keeps count of whole turns of the shaft
+    if   (rcA)   {              //  Keeps count of whole turns of the shaft
         turns--;
     }
     else    {
@@ -213,9 +212,9 @@ int main()
  ******************************************************************************
   **/
     int     c_5 = 0;
-    toggleTick.attach(&ledToggler, 0.5f);   //  set interrupt handler to toggle led
+    toggleTick.attach(&ledToggler, 0.5f);   //  Set interrupt handler to toggle led
     Ticker  tick200ms;
-    tick200ms.attach_us(&twohundredms_handler, 200000); //  cause timer interrupts at 5Hz
+    tick200ms.attach_us(&twohundredms_handler, 200000); //  Cause timer interrupts at 5Hz
  
     rcA.mode  (PullUp);     //  Attach pullup resistors to the 3 coder outputs
     rcB.mode  (PullUp);
@@ -236,7 +235,7 @@ int main()
  
         c_5++;
         if(c_5 > 4)
-        {               //  Can do stuff once per second here
+        {               //  Do things once per second here
             c_5 = 0;
         }
         while   (!trigger_200ms)    ;//  NEARLY ALL CPU TIME WASTED HERE waiting for interrupt handler to set trigger_200 true
