@@ -230,7 +230,8 @@ int main()
     pc.printf   ("Jon's rotary encoder test sytem starting up\r\n");
  
     //  Main loop
-    while(1) {  //  loop forever
+    while(1) 
+    {
         pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 2048.0);
  
         c_5++;
