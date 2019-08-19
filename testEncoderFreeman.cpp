@@ -19,8 +19,9 @@
 
 #define MPR_1 4
 
-#define STEPS_1 (200 * 128)
-#define STEPS_2 (STEPS_1 * 2)
+#define DEG_1 (200*128/360)     // One degree
+#define STEPS_1 (200 * 128)     // Full revolution 
+#define STEPS_2 (STEPS_1 * 2)   // Two revolutions
 
 #define DELAY_1 1000
 #define DELAY_2 2000
@@ -129,13 +130,15 @@ void startup()
     wait_ms(DELAY_1);    
 }
 
-int forward(int motorChoice, int steps)
+int forward(int motor, int degree)//int motorChoice, int degree
 {
-        motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, STEPS_1);
-        motors1stLevel[L6470_L1M2]->move(StepperMotor::FWD, STEPS_1);
-      wait_ms(DELAY_3);
+        if(motor == 1)
+            motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, DEG_1*degree);
+        else if(motor == 2)
+            motors1stLevel[L6470_L1M2]->move(StepperMotor::FWD, DEG_1*degree);        
+        else
+            motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, DEG_1*degree);
 //        motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);   // There is no L2M1
-        motors2ndLevel[L6470_L2M2]->move(StepperMotor::FWD, STEPS_1);
 }    
 
 
@@ -215,7 +218,12 @@ int main()
 
     // startup();
 
-    forward();
+    forward(1,180);
+          wait_ms(DELAY_1);        
+    forward(2,360*6);
+          wait_ms(DELAY_1);        
+    forward(4,180);
+    
 //    allTogether();
 /**
  ******************************************************************************
@@ -234,7 +242,7 @@ int main()
     rcB.fall  (&rcBfall_handler);
     rcZ.rise  (&rcZrise_handler);
  
-    pc.baud (115200);
+    pc.baud (9600);
     pc.printf   ("Jon's rotary encoder test sytem starting up\r\n");
  
     //  Main loop
@@ -242,7 +250,7 @@ int main()
     {
 //        pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 2048.0);
         pc.printf   ("Turns %+d\t%+.1f degree\r\n", turns, (double)angle * 360.0 / 30.0);
-
+        
         c_5++;
         if(c_5 > 4)
         {               //  Do things once per second here
