@@ -217,7 +217,8 @@ int main()
     motors2ndLevel = x_nucleo_ihm02a1two->get_components();
 
     // startup();
-
+  //motorCommand(motorChoice,revolutionInDegrees);
+  //motorCommand(Integers 1-4, positive integers);    
     forward(1,180);
           wait_ms(DELAY_1);        
     forward(2,360*6);
