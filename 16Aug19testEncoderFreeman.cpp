@@ -130,7 +130,7 @@ void startup()
     wait_ms(DELAY_1);    
 }
 
-int forward(int motor, int degree)//int motorChoice, int degree
+void forward(int motor, int degree)//int motorChoice, int degree
 {
         if(motor == 1)
             motors1stLevel[L6470_L1M1]->move(StepperMotor::FWD, DEG_1*degree);
